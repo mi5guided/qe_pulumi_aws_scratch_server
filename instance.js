@@ -99,6 +99,11 @@ function rsrcPulumiCreate() {
   }
   rsrcPulumiNetwork.group = new aws.ec2.SecurityGroup(modConfig.prefix+"SecurityGroup", sgParam);
 
+  rsrcPulumiNetwork.keypair = new aws.ec2.KeyPair(modConfig.prefix+"KeyPair", {
+    keyName  : "generic-keypair.pem",
+    publicKey:"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDgYN11f/qoujD4cUw6K//770absgxNg/8vD+zoVEVOtrSWlaRVeUmzqQ05wNAk1QrO+mXnhkGIq0AIN4g0g58/G5HdZNqCWvaTHmgWiXlQf1x96IGEw+D4hdFNKW5V8uZWXbQp0qZhXDJF8JJGo0ai98ovL3ihSZj0G6wNkJEhjUSysBn95COfgZfgEzGyPkC79HX+5C+ksA7KTXX/Ky161456JziwYW0ECZ+F0b55cZX6iRIWmO6nWXdELfZTOsOXKKSULp6zAxYPmVFRYUni0d1mOdVhAgIJ4IrXgdi3Q8IqNc13PaLK1UZtIVQKmSANdIJV7R4L0sKiRzCuQYQV dougyoon@doug-ext-usb"
+  });
+
   rsrcPulumiNetwork.server = new aws.ec2.Instance(modConfig.prefix+"Instance", {
     tags: { "Name": modConfig.prefix+"Instance" },
     subnetId: awsNetwork.pulumiResources.subnet0.id,
@@ -106,6 +111,7 @@ function rsrcPulumiCreate() {
     instanceType: modConfig.size,
     securityGroups: [ rsrcPulumiNetwork.group.id ],
     ami: modConfig.amiId,
+    keyName: rsrcPulumiNetwork.keypair.keyName,
     userData: modConfig.userData
   });
 
@@ -119,9 +125,11 @@ function rsrcPulumiCreate() {
 function postDeploy() {
   pulumi.all([
     rsrcPulumiNetwork.server.id,
-    rsrcPulumiNetwork.server.publicIp
+    rsrcPulumiNetwork.server.publicIp,
+    rsrcPulumiNetwork.keypair.keyName
   ]).apply(([x,y]) => {
-    console.log("Instance Info", x,y);
+    console.log("Instance Info", x,y,z);
+    console.log("ssh -i",z,"ec2_user@"+y)
   });
 }
 
