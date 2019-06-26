@@ -131,9 +131,9 @@ function postDeploy() {
     rsrcPulumiNetwork.server.id,
     rsrcPulumiNetwork.server.publicIp,
     rsrcPulumiNetwork.keypair.keyName
-  ]).apply(([x,y]) => {
+  ]).apply(([x,y,z]) => {
     console.log("Instance Info", x,y,z);
-    console.log("ssh -i",z,"ec2_user@"+y)
+    console.log("ssh -i",z,"ec2-user@"+y)
   });
 }
 
