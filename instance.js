@@ -108,6 +108,9 @@ function rsrcPulumiCreate() {
     ami: modConfig.amiId,
     userData: modConfig.userData
   });
+
+  // need to call this here, since sometimes, we get called from an event
+  postDeploy();
 }
 
 // ****************************************************************************
@@ -135,8 +138,6 @@ function ddStart(params) {
   } else {
     rsrcPulumiCreate();
   }
-  
-  postDeploy();
 }
 
 module.exports.ddStart = ddStart;

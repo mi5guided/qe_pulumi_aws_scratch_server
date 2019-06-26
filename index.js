@@ -18,6 +18,7 @@ awsNetwork.ddStart(netParams);
 
 // Define and Deploy ec2 instance
 var ec2Params = {
+//  "amiId"   : "ami-00c79db59589996b9",
   "amiId"   : "",
   "size"    : "t3.nano",
   "ports"   : [80,22],

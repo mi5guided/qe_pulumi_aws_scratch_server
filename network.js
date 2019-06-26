@@ -25,8 +25,7 @@ function setModuleConfig(parm) {
   if (parm.prefix !== undefined) {
     modConfig.prefix = parm.prefix;
   }
-
-  let targetSubnetSize = modConfig.cidr.split("/")[1]+Math.ceil(Math.log2(modConfig.subnets));
+  let targetSubnetSize = parseInt(modConfig.cidr.split("/")[1])+Math.ceil(Math.log2(modConfig.subnets));
   modConfig.subnetCidrs = cidrMath.getSubnetCidrs(targetSubnetSize, modConfig.cidr);
 }
 
@@ -62,7 +61,7 @@ function rsrcPulumiCreate() {
       vpcId: rsrcPulumiNetwork.vpc.id
     });
 
-    rsrcPulumiNetwork.routeTableAssociation = new aws.ec2.RouteTableAssociation(modConfig.prefix+"NetworkRouteTableAssoc", {
+    rsrcPulumiNetwork.routeTableAssociation = new aws.ec2.RouteTableAssociation(modConfig.prefix+"NetworkRouteTableAssoc"+i, {
       routeTableId: rsrcPulumiNetwork.routeTable.id,
       subnetId: rsrcPulumiNetwork["subnet"+i].id,
     });
