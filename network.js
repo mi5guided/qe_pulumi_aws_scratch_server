@@ -11,6 +11,7 @@ let modConfig = {
   "subnetCidrs" : []
 };
 let rsrcPulumiNetwork = {};
+const azList = pulumi.output(aws.getAvailabilityZones({}));
 
 // ****************************************************************************
 // Configure module
@@ -57,6 +58,7 @@ function rsrcPulumiCreate() {
   for (let i=0; i<modConfig.subnets; i++) {
     rsrcPulumiNetwork["subnet"+i] = new aws.ec2.Subnet(modConfig.prefix+"NetworkSubnet"+i, {
       cidrBlock: modConfig.subnetCidrs[i],
+      availabilityZone: azList.apply(available => available.names[(i%available.names.length)]),
       tags: {Name:modConfig.prefix+"NetworkSubnet"+i},
       vpcId: rsrcPulumiNetwork.vpc.id
     });

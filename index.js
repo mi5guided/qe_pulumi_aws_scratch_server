@@ -22,7 +22,6 @@ async function syncExecution() {
 
     // Read key material
     keyMaterial = fs.readFileSync(keyFile, "utf8");
-    console.log(keyMaterial);
 
     // Define and Deploy networking
     var netParams = {
