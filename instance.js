@@ -47,44 +47,18 @@ function setModuleConfig(parm) {
 // ****************************************************************************
 // Get AMI IDs
 // ****************************************************************************
-async function getAMIs() {
-  let configPulumi = new pulumi.Config("aws");
-  var ec2 = new AWSCore.EC2({"region": configPulumi.get("region")});
-  let amiList = [];
-  let amiNameList = [];
-  let aznLinuxExp = /Amazon Linux 2.+gp2/;
-  let sinceDate = Date.parse("01 May 2019");
-  var params = { 
-    "Owners" : [ "amazon" ],
-    "Filters": [
-      { "Name":"architecture", "Values":["x86_64"] },
-      { "Name": "is-public", "Values":["true"] },
-      { "Name":"virtualization-type", "Values":["hvm"] }
-    ]
-  };
-
-  try {
-    let amImages = await ec2.describeImages(params).promise();
-    amImages.Images.forEach((x) => {
-      let descParse;
-      if (x.Description != undefined) {
-        descParse = x.Description.match(aznLinuxExp);
-      } else {
-        descParse = null;
-      }
-      if (sinceDate < Date.parse(x.CreationDate) && (descParse)){
-        amiList.push(x.ImageId);
-        amiNameList.push(x.Name);
-      }
-    });
-    console.log(amiList.length,"images found");
-    console.log("using:",amiList[0],amiNameList[0]);
-    modConfig.amiId = amiList[0];
-    eventEmitter.emit('doneAMI');
-  } catch (err) {
-    console.log("error:", err);
-    return(null);
-  }
+function getAMIs() {
+  const awsLinux = pulumi.output(aws.getAmi({
+    filters: [
+      { "name": "architecture", "values": ["x86_64"]},
+      { "name": "is-public", "values":["true"] },
+      { "name": "virtualization-type", "values":["hvm"] },
+      { "name": "name", "values":["amzn2-ami-hvm-2.0*-gp2"] }
+    ],
+    owners: ["amazon"],
+    mostRecent: true
+  })).apply(result => result.id);
+  modConfig.amiId = awsLinux;
 }
 
 // ****************************************************************************
@@ -118,9 +92,6 @@ function rsrcPulumiCreate() {
     keyName: rsrcPulumiNetwork.keypair.keyName,
     userData: modConfig.userData
   });
-
-  // need to call this here, since sometimes, we get called from an event
-  postDeploy();
 }
 
 // ****************************************************************************
@@ -146,10 +117,9 @@ function ddStart(params) {
   // if no AMI specified, go find a recent AMI
   if (modConfig.amiId === "") {
     getAMIs();
-    eventEmitter.on('doneAMI',rsrcPulumiCreate);
-  } else {
-    rsrcPulumiCreate();
   }
+  rsrcPulumiCreate();
+  postDeploy();
 }
 
 module.exports.ddStart = ddStart;
