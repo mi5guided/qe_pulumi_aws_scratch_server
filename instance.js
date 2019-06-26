@@ -11,6 +11,7 @@ let modConfig = {
   "size"         : "t3.nano",
   "prefix"       : "qe",
   "ports"        : [22],
+  "keyMaterial"  : "",
   "userData"     : 
   `#!/bin/bash
   echo "Hello, World! FINALLY GOT THIS WORKING!" > index.html
@@ -34,6 +35,9 @@ function setModuleConfig(parm) {
   }
   if (parm.ports !== undefined) {
     modConfig.ports = parm.ports;
+  }
+  if (parm.keyMaterial !== undefined) {
+    modConfig.keyMaterial = parm.keyMaterial;
   }
   if (parm.userData !== undefined) {
     modConfig.userData = parm.userData;
@@ -101,7 +105,7 @@ function rsrcPulumiCreate() {
 
   rsrcPulumiNetwork.keypair = new aws.ec2.KeyPair(modConfig.prefix+"KeyPair", {
     keyName  : "generic-keypair.pem",
-    publicKey:"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDgYN11f/qoujD4cUw6K//770absgxNg/8vD+zoVEVOtrSWlaRVeUmzqQ05wNAk1QrO+mXnhkGIq0AIN4g0g58/G5HdZNqCWvaTHmgWiXlQf1x96IGEw+D4hdFNKW5V8uZWXbQp0qZhXDJF8JJGo0ai98ovL3ihSZj0G6wNkJEhjUSysBn95COfgZfgEzGyPkC79HX+5C+ksA7KTXX/Ky161456JziwYW0ECZ+F0b55cZX6iRIWmO6nWXdELfZTOsOXKKSULp6zAxYPmVFRYUni0d1mOdVhAgIJ4IrXgdi3Q8IqNc13PaLK1UZtIVQKmSANdIJV7R4L0sKiRzCuQYQV dougyoon@doug-ext-usb"
+    publicKey: modConfig.keyMaterial
   });
 
   rsrcPulumiNetwork.server = new aws.ec2.Instance(modConfig.prefix+"Instance", {
