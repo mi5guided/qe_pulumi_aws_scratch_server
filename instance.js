@@ -89,13 +89,13 @@ async function getAMIs() {
 function rsrcPulumiCreate() {
   let sgParam = {vpcId:awsNetwork.pulumiResources.vpc.id, ingress:[]};
 
-  for (let i=0; i<modConfig.ports; i++) {
+  for (let i=0; i<modConfig.ports.length; i++) {
     sgParam.ingress.push({
       protocol: "tcp",
       fromPort: modConfig.ports[i],
       toPort: modConfig.ports[i],
       cidrBlocks: ["0.0.0.0/0"]
-    })
+    });
   }
   rsrcPulumiNetwork.group = new aws.ec2.SecurityGroup(modConfig.prefix+"SecurityGroup", sgParam);
 
