@@ -1,6 +1,5 @@
-# qe_pulumi_aws_webserver
-A Quick Environment web server using node.js. This project uses Pulumi/node.js to stand up the environment
-
+# Quick Environment: Simple Server using Pulumi AWS node.js
+A Quick Environment for a simple scratch linux server in AWS. This project uses Pulumi/node.js to stand up the environment.<br/>
 *NOTE:* this project assumes you are running Pulumi from Linux (e.g. calls to ssh-keygen)
 
 ## Install Pulumi
