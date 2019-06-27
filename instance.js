@@ -1,7 +1,6 @@
 "use strict";
 const aws = require("@pulumi/aws");
 const pulumi = require("@pulumi/pulumi");
-const AWSCore = require('aws-sdk');
 const awsNetwork = require("./network");
 const events = require('events');
 
