@@ -19,10 +19,10 @@ make
 ```
 
 ## Source Files
-  - index.js: main entry point for the program 
-    -- will create a pem and pub file
-    -- override default values in the other modules
-    -- invoke the other modules
+  - index.js: main entry point for the program<br/>
+  -- will create a pem and pub file<br/>
+  -- override default values in the other modules<br/>
+  -- invoke the other modules<br/>
   - network.js: module to create the VPC, etc
   - instance.js: module to create the ec2 instance
   - utilCidr.js: utility functions for CIDR math/manipulations
