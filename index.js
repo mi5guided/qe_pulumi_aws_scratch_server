@@ -38,7 +38,30 @@ async function syncExecution() {
       "keyMaterial" : keyMaterial,
       "size"        : "t3.nano",
       "ports"       : [80,22],
-      "prefix"      : "qews"
+      "prefix"      : "qews",
+      "userData"     : 
+      `#!/bin/bash
+      sudo yum -y update
+      sudo yum -y install git
+      sudo yum -y install htop
+      cd /home/ec2-user
+
+      # install node.js via nvm
+      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+      nvm install 10
+
+      # install pulumi
+      sudo -u ec2-user mkdir -p /home/ec2-user/.pulumi/bin
+      curl -fsSL https://get.pulumi.com | sudo -u ec2-user sh
+      npm install @pulumi/aws @pulumi/pulumi
+      echo 'export PATH=$PATH:/home/ec2-user/.pulumi/bin' >> /home/ec2-user/.bashrc
+
+      # install the project
+      sudo -u ec2-user git clone https://github.com/mi5guided/qe_pulumi_aws_webserver.git
+      `
     };
     awsInstance.ddStart(ec2Params);
   } catch (err) {

@@ -64,7 +64,7 @@ function getAMIs() {
 // Create resources
 // ****************************************************************************
 function rsrcPulumiCreate() {
-  let sgParam = {vpcId:awsNetwork.pulumiResources.vpc.id, ingress:[]};
+  let sgParam = {vpcId:awsNetwork.pulumiResources.vpc.id, ingress:[], egress:[]};
 
   for (let i=0; i<modConfig.ports.length; i++) {
     sgParam.ingress.push({
@@ -74,6 +74,13 @@ function rsrcPulumiCreate() {
       cidrBlocks: ["0.0.0.0/0"]
     });
   }
+  sgParam.egress.push({
+    protocol: "-1",
+    fromPort: 0,
+    toPort: 0,
+    cidrBlocks: ["0.0.0.0/0"]
+  });
+
   rsrcPulumiNetwork.group = new aws.ec2.SecurityGroup(modConfig.prefix+"SecurityGroup", sgParam);
 
   rsrcPulumiNetwork.keypair = new aws.ec2.KeyPair(modConfig.prefix+"KeyPair", {
