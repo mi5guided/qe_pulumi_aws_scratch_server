@@ -4,17 +4,17 @@ A Quick Environment for a simple scratch linux server in AWS. This project uses 
 
 ## Install Pulumi
 ```
-curl -fsSL https://get.pulumi.com | sh
-npm install @pulumi/aws @pulumi/pulumi
+  $ curl -fsSL https://get.pulumi.com | sh
+  $ npm install @pulumi/aws @pulumi/pulumi
 ```
 
 ## Install this project
-```mkdir pulumi-project
-cd pulumi-project
-pulumi new  # (pick aws-javascript)
-git clone https://github.com/mi5guided/qe_pulumi_aws_webserver.git
-mv qe_pulumi_aws_webserver/* .
-make
+```
+  $ mkdir pulumi-project
+  $ cd pulumi-project
+  $ pulumi new aws-javascript # Create a new Pulumi project and stack from a template
+  $ git clone https://github.com/mi5guided/qe_pulumi_aws_webserver.git .
+  $ make
 ```
 
 ## Source Files
@@ -26,3 +26,10 @@ make
   - instance.js: module to create the ec2 instance
   - utilCidr.js: utility functions for CIDR math/manipulations
 
+## Standing up the environment
+```
+  $ pulumi login --local  # this will bypass the need to log into the pulumi cloud service
+  $ pulumi config         # will ask about region and profile
+  $ pulumi preview --json # analogous to terraform plan
+  $ pulumi up             # update the stack (analogous to terraform apply)
+```

@@ -21,7 +21,7 @@ access-test:
 	# install pulumi
 	mkdir -p ~/.pulumi/bin
 	curl -fsSL https://get.pulumi.com | sh
-	echo 'export PATH=$PATH:$(HOME)/.pulumi/bin' >> ~/.bashrc
+	echo 'export PATH=$(PATH):$(HOME)/.pulumi/bin' >> ~/.bashrc
 
 install-tools: ~/.nvm ~/.pulumi/bin
 	# install node.js via nvm
