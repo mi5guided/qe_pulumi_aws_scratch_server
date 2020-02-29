@@ -29,6 +29,7 @@ A Quick Environment for a simple scratch linux server in AWS. This project uses 
 ## Standing up the environment
 ```
   $ pulumi login --local  # this will bypass the need to log into the pulumi cloud service
+  $ pulumi new            # create a new project file
   $ pulumi config         # will ask about region and profile
   $ pulumi preview --json # analogous to terraform plan
   $ pulumi up             # update the stack (analogous to terraform apply)

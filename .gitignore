@@ -1,3 +1,6 @@
+# pulumi project file
+pulumi.yaml
+
 # random keypairs
 *.pem
 *.pub
